@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html ng-app="adminApp">
+<head>
+    <title>Admin Panel</title>
+    <link rel="stylesheet" href="css/style.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.8.2/angular.min.js"></script>
+    <script src="js/admin-app.js"></script>
+</head>
+<body ng-controller="AdminController" ng-init="checkAuth()">
+    <header>
+        <h1>Admin Dashboard</h1>
+        <button ng-click="logout()" class="btn">Logout</button>
+    </header>
+
+    <div class="admin-panel">
+        <h2>Add New Pet</h2>
+        <form ng-submit="addPet()">
+            <input type="text" ng-model="newPet.name" placeholder="Name" required>
+            <input type="text" ng-model="newPet.type" placeholder="Type" required>
+            <input type="text" ng-model="newPet.breed" placeholder="Breed" required>
+            <input type="number" ng-model="newPet.age" placeholder="Age" required>
+            <input type="text" ng-model="newPet.gender" placeholder="Gender" required>
+            <input type="url" ng-model="newPet.image" placeholder="Image URL" required>
+            <textarea ng-model="newPet.description" placeholder="Description" required></textarea>
+            <button type="submit" class="btn">Add Pet</button>
+        </form>
+
+        <h2>All Pets</h2>
+        <div class="pet-list">
+            <div class="pet-card" ng-repeat="pet in pets">
+                <img ng-src="{{ pet.image }}" alt="{{ pet.name }}">
+                <h3>{{ pet.name }}</h3>
+                <div ng-if="pet.adopted" class="adopted-info">
+                    <p class="adopted-label">ADOPTED</p>
+                    <p><strong>By:</strong> {{ pet.adoptedBy.name }}</p>
+                    <p><strong>Email:</strong> {{ pet.adoptedBy.email }}</p>
+                    <p><strong>Phone:</strong> {{ pet.adoptedBy.phone }}</p>
+                </div>
+                <button ng-click="deletePet(pet.id)" class="btn-delete">Delete</button>
+            </div>
+        </div>
+
+        <h2>Adoption Records</h2>
+        <div class="adoption-records">
+            <div class="record" ng-repeat="record in adoptions">
+                <p><strong>Pet:</strong> {{ getPetName(record.petId) }}</p>
+                <p><strong>User:</strong> {{ record.adoptionDetails.name }}</p>
+                <p><strong>Date:</strong> {{ record.adoptionDate | date }}</p>
+                <button ng-click="viewDetails(record)" class="btn">View Details</button>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

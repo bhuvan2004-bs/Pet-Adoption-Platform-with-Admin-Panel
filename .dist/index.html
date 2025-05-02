@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html ng-app="petAdoptionApp">
+<head>
+    <title>Pet Adoption</title>
+    <link rel="stylesheet" href="css/style.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.8.2/angular.min.js"></script>
+    <script src="js/app.js"></script>
+</head>
+<body ng-controller="PetController" ng-init="checkAuth()">
+    <header>
+        <h1>Pet Adoption Center</h1>
+        <button ng-click="logout()" class="btn">Logout</button>
+    </header>
+
+    <div class="pet-list">
+        <div class="pet-card" ng-repeat="pet in pets">
+            <img ng-src="{{ pet.image }}" alt="{{ pet.name }}">
+            <h3>{{ pet.name }}</h3>
+            <p><strong>Type:</strong> {{ pet.type }}</p>
+            <p><strong>Breed:</strong> {{ pet.breed }}</p>
+            
+            <div ng-if="pet.adopted" class="adopted-info">
+                <p class="adopted-label">ADOPTED</p>
+                <p><strong>By:</strong> {{ pet.adoptedBy.name }}</p>
+                <p><strong>Email:</strong> {{ pet.adoptedBy.email }}</p>
+            </div>
+            
+            <div ng-if="!pet.adopted && selectedPet === pet.id" class="adoption-form">
+                <h4>Adoption Form</h4>
+                <form ng-submit="submitAdoptionForm(pet.id)">
+                    <div class="form-group">
+                        <label>Full Name</label>
+                        <input type="text" ng-model="adoptionDetails.name" required>
+                    </div>
+                    <div class="form-group">
+                        <label>Email</label>
+                        <input type="email" ng-model="adoptionDetails.email" required>
+                    </div>
+                    <div class="form-group">
+                        <label>Phone</label>
+                        <input type="tel" ng-model="adoptionDetails.phone" required>
+                    </div>
+                    <div class="form-group">
+                        <label>Address</label>
+                        <textarea ng-model="adoptionDetails.address" required></textarea>
+                    </div>
+                    <button type="submit" class="btn">Submit Adoption</button>
+                    <button type="button" class="btn-cancel" ng-click="cancelAdoptionForm()">Cancel</button>
+                </form>
+            </div>
+            
+            <button ng-if="!pet.adopted && selectedPet !== pet.id" 
+                    ng-click="showAdoptionForm(pet.id)" 
+                    class="btn">
+                Adopt Me
+            </button>
+        </div>
+    </div>
+</body>
+</html>
